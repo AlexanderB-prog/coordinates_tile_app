@@ -21,129 +21,158 @@ class MainPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.grey,
-      body: Column(
+      body: BlocListener<MainBloc, MainState>(
+  listener: (context, state) {
+    if (state is ErrorMainState) {
+      Scaffold.of(context).showBottomSheet((context) => GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Container(
+          alignment: Alignment.center,
+          width: double.infinity,
+          height: 100,
+          color: Colors.red,
+          child: Text(
+            state.text,
+            style: const TextStyle(color: Colors.white,fontWeight: FontWeight.w600),
+          ),
+        ),
+      ));
+    }
+  },
+  child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            width: 230,
-            child: TextField(
-              onSubmitted: (text) {
-                context.read<MainBloc>().add(InputZoomMainEvent(text));
-              },
-              onChanged: (text) {
-                context.read<MainBloc>().add(InputZoomMainEvent(text));
-              },
-              maxLines: 1,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(0),
-                hintStyle: const TextStyle(fontSize: 12),
-                hintText: 'Zoom',
-                prefixIcon: const Icon(
-                  Icons.location_on,
-                  color: Colors.grey,
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(style: BorderStyle.none),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(style: BorderStyle.none),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(style: BorderStyle.none),
-                  borderRadius: BorderRadius.circular(20),
-                ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  SizedBox(
+                    width: 230,
+                    child: TextField(
+                        keyboardType: TextInputType.number,
+                      onSubmitted: (text) {
+                        bloc.add(InputLatMainEvent(text));
+                      },
+                      onChanged: (text) {
+                        bloc.add(InputLatMainEvent(text));
+                      },
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.all(0),
+                        hintStyle: const TextStyle(fontSize: 12),
+                        hintText: 'Широта',
+                        prefixIcon: const Icon(
+                          Icons.location_on,
+                          color: Colors.grey,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(style: BorderStyle.none),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(style: BorderStyle.none),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(style: BorderStyle.none),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    width: 230,
+                    child: TextField(
+                        keyboardType: TextInputType.number,
+                      onSubmitted: (text) {
+                        bloc.add(InputLongMainEvent(text));
+                      },
+                      onChanged: (text) {
+                        bloc.add(InputLongMainEvent(text));
+                      },
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.all(0),
+                        hintStyle: const TextStyle(fontSize: 12),
+                        hintText: 'Долгота',
+                        prefixIcon: const Icon(
+                          Icons.location_on,
+                          color: Colors.grey,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(style: BorderStyle.none),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(style: BorderStyle.none),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(style: BorderStyle.none),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
+              const SizedBox(width: 50),
+              Column(
+                children: [
+                 const Text('Zoom', style: TextStyle(fontWeight: FontWeight.w600,fontSize: 15),),
+                  const SizedBox(height: 10,),
+                  Card(
+                    color: Colors.white,
+                    child: BlocBuilder<MainBloc, MainState>(
+                      builder: (context, state) {
+                        return DropdownButton<int>(
+                          disabledHint: const Text('Zoom',style: TextStyle(color: Colors.black),),
+                          value: state.zoom,
+                          icon: const Icon(Icons.map),
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.deepPurple),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.black38,
+                          ),
+                          onChanged: (int? zoom) {
+                            bloc.add(InputZoomMainEvent(zoom!));
+                          },
+                          items: zoomList.map<DropdownMenuItem<int>>((int value) {
+                            return DropdownMenuItem<int>(
+                              value: value,
+                              child: Text('$value'),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              )
+            ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
-
-          SizedBox(
-            width: 230,
-            child: TextField(
-              onSubmitted: (text) {
-                context.read<MainBloc>().add(InputLatMainEvent(text));
-              },
-              onChanged: (text) {
-                context.read<MainBloc>().add(InputLatMainEvent(text));
-              },
-              maxLines: 1,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(0),
-                hintStyle: const TextStyle(fontSize: 12),
-                hintText: 'Широта',
-                prefixIcon: const Icon(
-                  Icons.location_on,
-                  color: Colors.grey,
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(style: BorderStyle.none),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(style: BorderStyle.none),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(style: BorderStyle.none),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            width: 230,
-            child: TextField(
-              onSubmitted: (text) {
-                context.read<MainBloc>().add(InputLongMainEvent(text));
-              },
-              onChanged: (text) {
-                context.read<MainBloc>().add(InputLongMainEvent(text));
-              },
-              maxLines: 1,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(0),
-                hintStyle: const TextStyle(fontSize: 12),
-                hintText: 'Долгота',
-                prefixIcon: const Icon(
-                  Icons.location_on,
-                  color: Colors.grey,
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(style: BorderStyle.none),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(style: BorderStyle.none),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(style: BorderStyle.none),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-          ),
+          const SizedBox(height: 15),
           ElevatedButton(
               onPressed: () {
-                context.read<MainBloc>().add(FindTileMainEvent());
+                bloc.add(FindTileMainEvent());
               },
               child: const Text('Посмотреть tile')),
-          ShowTile(),
+          const SizedBox(height: 15),
+          const ShowTile(),
         ],
       ),
+),
     );
   }
 }
@@ -157,29 +186,33 @@ class ShowTile extends StatelessWidget {
       builder: (context, state) {
         return Container(
           color: Colors.grey,
-          child: (state.X == 1 && state.Y == 1)
-              ? SizedBox.shrink()
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('X: ${state.X}'),
-                        SizedBox(
-                          width: 50,
-                        ),
-                        Text('Y: ${state.Y}'),
-                      ],
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: Image.network(
-                        "https://core-carparks-renderer-lots.maps.yandex.net/maps-rdr-carparks/tiles?l=carparks&x=${state.X}&y=${state.Y}&z=${state.zoom}&scale=1&lang=ru_RU",
-                      ),
-                    )
-                  ],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('X: ${state.X}'),
+                  const SizedBox(
+                    width: 50,
+                  ),
+                  Text('Y: ${state.Y}'),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Container(
+                color: Colors.white,
+                child: Image.network(
+                  "https://core-carparks-renderer-lots.maps.yandex.net/maps-rdr-carparks/tiles?l=carparks&x=${state.X}&y=${state.Y}&z=${state.zoom}&scale=1&lang=ru_RU",
+                  errorBuilder:
+                      (BuildContext context, Object exception, StackTrace? stackTrace) {
+                    return const Text('По введеным координатам Tile не найден.',style: TextStyle(color: Colors.red,fontWeight: FontWeight.w600),);
+                  },
+
                 ),
+              )
+            ],
+          ),
         );
       },
     );

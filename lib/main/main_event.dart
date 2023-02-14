@@ -14,9 +14,9 @@ class InputLongMainEvent extends MainEvent {
   InputLongMainEvent(this.text);
 }
 class InputZoomMainEvent extends MainEvent {
-  final String text;
+  final int zoom;
 
-  InputZoomMainEvent(this.text);
+  InputZoomMainEvent(this.zoom);
 }
 
 
