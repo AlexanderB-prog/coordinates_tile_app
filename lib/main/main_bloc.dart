@@ -7,7 +7,7 @@ import 'main_state.dart';
 const List<int> zoomList = <int>[14, 15, 16, 17, 18, 19, 20];
 
 class MainBloc extends Bloc<MainEvent, MainState> {
-  MainBloc() : super(MainState(X: 316898, Y: 164368, zoom: zoomList[5], tileDisplay: false)) {
+  MainBloc() : super(MainState(X: 0, Y: 0, zoom: zoomList[5], tileDisplay: false)) {
     on<InitEvent>(_init);
     on<InputZoomMainEvent>(_inputZoom);
     on<InputLatMainEvent>(_inputLat);
@@ -15,15 +15,15 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     on<FindTileMainEvent>(_findTileMainEvent);
   }
 
-  String _lat = '55.788276';
-  String _long = '37.609961';
+  String _lat = '';
+  String _long = '';
   int _zoom = zoomList[5];
   int _tileX = 0;
   int _tileY = 0;
   bool _tileDisplay = false;
 
   void _init(InitEvent event, Emitter<MainState> emit) async {
-    emit(MainState(X: 316898, Y: 164368, zoom: zoomList[5], tileDisplay: _tileDisplay));
+    emit(MainState(X: 0, Y: 0, zoom: zoomList[5], tileDisplay: _tileDisplay));
   }
 
   void _inputLat(InputLatMainEvent event, _) async {
@@ -62,6 +62,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
       FindTileMainEvent event, Emitter<MainState> emit) async {
     try {
+
     _getXY();
     _tileDisplay = true;
     emit(MainState(X: _tileX, Y: _tileY, zoom: _zoom, tileDisplay: _tileDisplay,));

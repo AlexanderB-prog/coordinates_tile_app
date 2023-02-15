@@ -54,7 +54,7 @@ class MainPage extends StatelessWidget {
                     child: TextField(
                         keyboardType: TextInputType.number,
                       onSubmitted: (text) {
-                        bloc.add(InputLatMainEvent(text));
+                        bloc.add( FindTileMainEvent());
                       },
                       onChanged: (text) {
                         bloc.add(InputLatMainEvent(text));
@@ -90,7 +90,7 @@ class MainPage extends StatelessWidget {
                     child: TextField(
                         keyboardType: TextInputType.number,
                       onSubmitted: (text) {
-                        bloc.add(InputLongMainEvent(text));
+                        bloc.add( FindTileMainEvent());
                       },
                       onChanged: (text) {
                         bloc.add(InputLongMainEvent(text));
