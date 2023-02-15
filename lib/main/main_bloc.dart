@@ -34,22 +34,26 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     _long = event.text;
   }
 
-  void _getXY(Emitter<MainState> emit) {
-    try {
+  void _getXY() {
+
       _tileX = longToTileX(double.parse(_long), _zoom);
       _tileY = latToTileY(double.parse(_lat), _zoom);
-    }catch (e) {
-      const errorText = 'Некорректные координаты. '
-          'Повторите воод координат. Пример широты 55.750626, долготы 37.597664';
-      emit(ErrorMainState(X: _tileX, Y: _tileY, zoom: _zoom, tileDisplay: _tileDisplay, text: errorText));
-    }
+
   }
 
   void _inputZoom(InputZoomMainEvent event, Emitter<MainState> emit) async {
     _zoom = event.zoom;
     if (_tileDisplay) {
-      _getXY(emit);
+      try {
+      _getXY();
       emit(MainState(X: _tileX, Y: _tileY, zoom: _zoom, tileDisplay: _tileDisplay,));
+      }catch (e) {
+        _tileDisplay = false;
+        const errorText = 'Некорректные координаты. '
+            'Повторите воод координат. Пример широты 55.750626, долготы 37.597664';
+        emit(ErrorMainState(X: _tileX, Y: _tileY, zoom: _zoom, tileDisplay: _tileDisplay, text: errorText));
+      }
+
     }
 
   }
@@ -57,9 +61,16 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   void _findTileMainEvent(
 
       FindTileMainEvent event, Emitter<MainState> emit) async {
-
-    _getXY(emit);
+    try {
+    _getXY();
     _tileDisplay = true;
     emit(MainState(X: _tileX, Y: _tileY, zoom: _zoom, tileDisplay: _tileDisplay,));
+  }catch (e) {
+  _tileDisplay = false;
+  const errorText = 'Некорректные координаты. '
+  'Повторите воод координат. Пример широты 55.750626, долготы 37.597664';
+  emit(ErrorMainState(X: _tileX, Y: _tileY, zoom: _zoom, tileDisplay: _tileDisplay, text: errorText));
+  }
+
   }
 }
