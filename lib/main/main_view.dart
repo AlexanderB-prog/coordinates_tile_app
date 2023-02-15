@@ -18,13 +18,14 @@ class MainPage extends StatelessWidget {
 
   Widget _buildPage(BuildContext context) {
     final bloc = BlocProvider.of<MainBloc>(context);
+    var bottomSheetController;
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: BlocListener<MainBloc, MainState>(
   listener: (context, state) {
     if (state is ErrorMainState) {
-      Scaffold.of(context).showBottomSheet((context) => GestureDetector(
+      bottomSheetController = Scaffold.of(context).showBottomSheet((context) => GestureDetector(
         onTap: () {
           Navigator.of(context).pop();
         },
@@ -39,7 +40,11 @@ class MainPage extends StatelessWidget {
           ),
         ),
       ));
-    }
+    } else
+      {
+        if (state.tileDisplay) {bottomSheetController.close();}
+
+      }
   },
   child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

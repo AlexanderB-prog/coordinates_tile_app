@@ -43,7 +43,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
 
   void _inputZoom(InputZoomMainEvent event, Emitter<MainState> emit) async {
     _zoom = event.zoom;
-    if (_tileDisplay) {
+    if (_lat!='' || _long!='') {
       try {
       _getXY();
       emit(MainState(X: _tileX, Y: _tileY, zoom: _zoom, tileDisplay: _tileDisplay,));
@@ -54,6 +54,8 @@ class MainBloc extends Bloc<MainEvent, MainState> {
         emit(ErrorMainState(X: _tileX, Y: _tileY, zoom: _zoom, tileDisplay: _tileDisplay, text: errorText));
       }
 
+    } else {
+      emit(MainState(X: 0, Y: 0, zoom: _zoom, tileDisplay: false));
     }
 
   }
