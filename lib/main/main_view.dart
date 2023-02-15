@@ -20,7 +20,7 @@ class MainPage extends StatelessWidget {
     final bloc = BlocProvider.of<MainBloc>(context);
 
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.white,
       body: BlocListener<MainBloc, MainState>(
   listener: (context, state) {
     if (state is ErrorMainState) {
@@ -71,15 +71,12 @@ class MainPage extends StatelessWidget {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderSide: const BorderSide(style: BorderStyle.none),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(style: BorderStyle.none),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(style: BorderStyle.none),
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
@@ -110,15 +107,13 @@ class MainPage extends StatelessWidget {
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderSide: const BorderSide(style: BorderStyle.none),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(style: BorderStyle.none),
+
                           borderRadius: BorderRadius.circular(20),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(style: BorderStyle.none),
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
@@ -185,7 +180,7 @@ class ShowTile extends StatelessWidget {
     return BlocBuilder<MainBloc, MainState>(
       builder: (context, state) {
         return Container(
-          color: Colors.grey,
+          color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -201,14 +196,18 @@ class ShowTile extends StatelessWidget {
               ),
               const SizedBox(height: 15),
               Container(
-                color: Colors.white,
-                child: Image.network(
-                  "https://core-carparks-renderer-lots.maps.yandex.net/maps-rdr-carparks/tiles?l=carparks&x=${state.X}&y=${state.Y}&z=${state.zoom}&scale=1&lang=ru_RU",
-                  errorBuilder:
-                      (BuildContext context, Object exception, StackTrace? stackTrace) {
-                    return const Text('По введеным координатам Tile не найден.',style: TextStyle(color: Colors.red,fontWeight: FontWeight.w600),);
-                  },
+                padding: const EdgeInsets.all(1),
+                color: Colors.black,
+                child: Container(
+                  color: Colors.white,
+                  child: Image.network(
+                    "https://core-carparks-renderer-lots.maps.yandex.net/maps-rdr-carparks/tiles?l=carparks&x=${state.X}&y=${state.Y}&z=${state.zoom}&scale=1&lang=ru_RU",
+                    errorBuilder:
+                        (BuildContext context, Object exception, StackTrace? stackTrace) {
+                      return const Text('По введеным координатам Tile не найден.',style: TextStyle(color: Colors.red,fontWeight: FontWeight.w600),);
+                    },
 
+                  ),
                 ),
               )
             ],
