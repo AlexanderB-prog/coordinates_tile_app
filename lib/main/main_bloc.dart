@@ -7,7 +7,7 @@ import 'main_state.dart';
 const List<int> zoomList = <int>[14, 15, 16, 17, 18, 19, 20];
 
 class MainBloc extends Bloc<MainEvent, MainState> {
-  MainBloc() : super(MainState(316898, 164368, zoomList[5])) {
+  MainBloc() : super(MainState(X: 316898, Y: 164368, zoom: zoomList[5], tileDisplay: false)) {
     on<InitEvent>(_init);
     on<InputZoomMainEvent>(_inputZoom);
     on<InputLatMainEvent>(_inputLat);
@@ -20,9 +20,10 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   int _zoom = zoomList[5];
   int _tileX = 0;
   int _tileY = 0;
+  bool _tileDisplay = false;
 
   void _init(InitEvent event, Emitter<MainState> emit) async {
-    emit(MainState(316898, 164368, 19));
+    emit(MainState(X: 316898, Y: 164368, zoom: zoomList[5], tileDisplay: _tileDisplay));
   }
 
   void _inputLat(InputLatMainEvent event, _) async {
@@ -40,19 +41,25 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     }catch (e) {
       const errorText = 'Некорректные координаты. '
           'Повторите воод координат. Пример широты 55.750626, долготы 37.597664';
-      emit(ErrorMainState(_tileX, _tileY, _zoom,errorText));
+      emit(ErrorMainState(X: _tileX, Y: _tileY, zoom: _zoom, tileDisplay: _tileDisplay, text: errorText));
     }
   }
 
   void _inputZoom(InputZoomMainEvent event, Emitter<MainState> emit) async {
     _zoom = event.zoom;
-    _getXY(emit);
-    emit(MainState(_tileX, _tileY, _zoom));
+    if (_tileDisplay) {
+      _getXY(emit);
+      emit(MainState(X: _tileX, Y: _tileY, zoom: _zoom, tileDisplay: _tileDisplay,));
+    }
+
   }
 
   void _findTileMainEvent(
+
       FindTileMainEvent event, Emitter<MainState> emit) async {
+
     _getXY(emit);
-    emit(MainState(_tileX, _tileY, _zoom));
+    _tileDisplay = true;
+    emit(MainState(X: _tileX, Y: _tileY, zoom: _zoom, tileDisplay: _tileDisplay,));
   }
 }

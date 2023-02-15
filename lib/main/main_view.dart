@@ -179,7 +179,7 @@ class ShowTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MainBloc, MainState>(
       builder: (context, state) {
-        return Container(
+        return state.tileDisplay ? Container(
           color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -212,7 +212,7 @@ class ShowTile extends StatelessWidget {
               )
             ],
           ),
-        );
+        ) : const SizedBox.shrink();
       },
     );
   }
